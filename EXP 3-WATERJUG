@@ -1,0 +1,38 @@
+from collections import deque
+
+def water_jug_problem(capacity_a, capacity_b, target):
+    visited = set()
+    queue = deque([(0, 0)]) 
+    
+    while queue:
+        current_state = queue.popleft()
+        jug_a, jug_b = current_state
+        
+        if jug_a == target or jug_b == target:
+            return current_state
+        
+
+        actions = [
+            (capacity_a, jug_b), (jug_a, capacity_b),
+            (0, jug_b), (jug_a, 0),
+            (min(jug_a + jug_b, capacity_a), max(0, jug_b - (capacity_a - jug_a))),
+            (max(0, jug_a - (capacity_b - jug_b)), min(jug_a + jug_b, capacity_b))
+        ]
+        
+        for action in actions:
+            if action not in visited:
+                queue.append(action)
+                visited.add(action)
+    
+    return None
+
+if __name__ == "__main__":
+    capacity_a = int(input("Enter the capacity of jug A: "))
+    capacity_b = int(input("Enter the capacity of jug B: "))
+    target = int(input("Enter the target amount of water: "))
+    
+    solution = water_jug_problem(capacity_a, capacity_b, target)
+    if solution is None:
+        print("No solution found.")
+    else:
+        print("Solution found:", solution)
